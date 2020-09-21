@@ -1,0 +1,25 @@
+name: 'Check Project Unchanged'
+description: 'Github Action to create a review branch.'
+
+inputs:
+  main_path:
+    required: true
+  release_number:
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+  - name: Check Project Unchanged
+    id: run-test-code
+    shell: bash
+    working-directory: ${{ inputs.main_path }}
+    run: |
+      echo "Creating Review Branch..."
+
+      git config user.name github-actions
+      git config user.email github-actions@github.com
+
+      git checkout -b review/${{ inputs.release_number }}
+      git commit --allow-empty -m "Creating review ${{ inputs.release_number }} branch..."
+      git push -u origin review/${{ inputs.release_number }}
